@@ -10,7 +10,8 @@ for sample in sorted(os.listdir(assemble_dir)):
         continue
     df = pd.read_csv(tab_file, sep="\t", skipinitialspace=True)
     df.columns = df.columns.str.strip()
-    tpm_dict[sample] = df.groupby("Gene ID")["TPM"].sum()
+    df["gene_id"] = df["Gene ID"] + "|" + df["Gene Name"]
+    tpm_dict[sample] = df.groupby("gene_id")["TPM"].sum()
 
 tpm_matrix = pd.DataFrame(tpm_dict)
 tpm_matrix.index.name = "gene_id"
